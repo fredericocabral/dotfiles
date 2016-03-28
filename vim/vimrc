@@ -1,0 +1,125 @@
+
+call pathogen#infect()
+call pathogen#helptags()
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+call vundle#end()
+
+
+" Powerline Setup
+set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 9
+set laststatus=2
+
+set foldmethod=indent
+set foldlevel=99
+
+set number
+autocmd InsertEnter * :set number
+autocmd InsertLeave * :set relativenumber
+
+
+set tabstop=4
+set shiftwidth=4
+set expandtab
+
+
+filetype on
+filetype plugin indent on
+filetype plugin on 
+filetype indent on
+syntax enable
+
+
+set cursorline
+"set cursorcolumn
+set background=dark
+
+"colorscheme solarized
+"colorscheme sourcerer
+colorscheme hybrid
+"colorscheme grb256
+"colorscheme distinguished
+"colorscheme railscasts
+"colorscheme python
+"colorscheme codeschool 
+"set guifont=Monaco:h12
+
+map <C-n> :NERDTreeToggle<CR>
+
+autocmd FileType python set sw=4
+autocmd FileType python set ts=4
+autocmd FileType python set sts=4
+
+" Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'} 
+" Bundle 'alfredodeza/pytest.vim'
+" Bundle 'mindriot101/vim-pytest-runner'
+
+
+"autocmd BufWritePost *.py call Flake8()
+
+" let g:PyFlakeOnWrite = 1
+
+" window navigation
+map <c-j> <c-w>j
+map <c-k> <c-w>k
+map <c-l> <c-w>l
+map <c-h> <c-w>h
+
+
+"Ack"
+nmap <leader>a <Esc>:Ack!
+
+" Pytest
+"nmap <silent><Leader>f <Esc>:Pytest file<CR>
+"nmap <silent><Leader>c <Esc>:Pytest class<CR>
+"nmap <silent><Leader>m <Esc>:Pytest method<CR>
+"" cycle through test errors
+"nmap <silent><Leader>tn <Esc>:Pytest next<CR>
+"nmap <silent><Leader>tp <Esc>:Pytest previous<CR>
+"nmap <silent><Leader>te <Esc>:Pytest error<CR>
+
+"map <Leader>t :call RunCurrentTestFile()<CR>
+"map <Leader>s :call RunNearestTest()<CR>
+"map <Leader>l :call RunLastTest()<CR>
+"map <Leader>a :call RunAllTests()<CR>
+
+
+" Add the virtualenv's site-packages to vim path
+py << EOF
+import os.path
+import sys
+import vim
+if 'VIRTUAL_ENV' in os.environ:
+    project_base_dir = os.environ['VIRTUAL_ENV']
+    sys.path.insert(0, project_base_dir)
+    activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+    execfile(activate_this, dict(__file__=activate_this))
+EOF
+
+
+:set colorcolumn=80
+
+" Find and Replace
+vnoremap <silent> s //e<C-r>=&selection=='exclusive'?'+1':''<CR><CR>
+    \:<C-u>call histdel('search',-1)<Bar>let @/=histget('search',-1)<CR>gv
+omap s :normal vs<CR>
+
+
+"au WinLeave * set nocursorline nocursorcolumn
+"au WinEnter * set cursorline cursorcolumn
+"set cursorline cursorcolumn
+
+set runtimepath^=~/.vim/bundle/ctrlp.vim
+
+let ropevim_vim_completion=0
+let ropevim_extended_complete=0
+
+let g:jedi#goto_command = "<leader>d"
+let g:jedi#goto_assignments_command = "<leader>g"
+let g:jedi#goto_definitions_command = ""
+let g:jedi#documentation_command = "K"
+let g:jedi#usages_command = "<leader>n"
+let g:jedi#completions_command = "<C-Space>"
+let g:jedi#rename_command = "<leader>r"
+let g:jedi#use_tabs_not_buffers = 1
