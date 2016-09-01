@@ -1,7 +1,6 @@
 #!/bin/bash
 green=`tput setaf 2`
 
-echo -e "I ${RED}love${NC} Stack Overflow\n"
 echo 'Instaling Inconsolata-G font'
 curl -O http://www.fantascienza.net/leonardo/ar/inconsolatag/inconsolata-g_font.zip
 mkdir font
