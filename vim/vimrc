@@ -4,6 +4,8 @@ call pathogen#helptags()
 
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'Valloric/YouCompleteMe'
 call vundle#end()
 
 
@@ -11,33 +13,51 @@ call vundle#end()
 set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 9
 set laststatus=2
 
-set foldmethod=indent
-set foldlevel=99
+"set foldmethod=indent
+"set foldlevel=99
 
 set number
-autocmd InsertEnter * :set number
-autocmd InsertLeave * :set relativenumber
-
-
-set tabstop=4
-set shiftwidth=4
+"autocmd InsertEnter * :set number
+"autocmd InsertLeave * :set relativenumber
+set tabstop=2
+set shiftwidth=2
 set expandtab
+set ruler
+set colorcolumn=80
+
+"version for regex used by vim. 
+"For some reasons the recent regex engine slow the vim performance for ruby
+set re=1 
 
 
 filetype on
 filetype plugin indent on
 filetype plugin on 
 filetype indent on
-syntax enable
+syntax on
+
+" ==========================================================================
+" SWAP
+" ---------------------------------------------------------------------------
+" vim put swap, backup and undo files in a special location instead 
+" of the working directory of the file being edited:
+set backupdir=~/.vim/backup//
+set directory=~/.vim/swap//
+set undodir=~/.vim/undo//
 
 
-set cursorline
-"set cursorcolumn
+
+" ==========================================================================
+" COLORS
+" ---------------------------------------------------------------------------
+"set cursorline
+set cursorcolumn
 set background=dark
 
 "colorscheme solarized
 "colorscheme sourcerer
 colorscheme hybrid
+"colorscheme distinguished
 "colorscheme grb256
 "colorscheme distinguished
 "colorscheme railscasts
@@ -45,7 +65,8 @@ colorscheme hybrid
 "colorscheme codeschool 
 "set guifont=Monaco:h12
 
-map <C-n> :NERDTreeToggle<CR>
+
+autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
 
 autocmd FileType python set sw=4
 autocmd FileType python set ts=4
@@ -60,15 +81,65 @@ autocmd FileType python set sts=4
 
 " let g:PyFlakeOnWrite = 1
 
-" window navigation
+
+
+" ------------------------------------------------------
+" KEY MAPS
+" -----------------------------------------------------
+" Clipboard register
+map <leader>y "*y
+map <leader>p "*p
+
+" move around splits
 map <c-j> <c-w>j
 map <c-k> <c-w>k
 map <c-l> <c-w>l
 map <c-h> <c-w>h
 
+"NerdTree
+map <C-n> :NERDTreeToggle<CR>
 
-"Ack"
+"Ack Search"
 nmap <leader>a <Esc>:Ack!
+
+" Close all other windows, open a vertical split, and open this file's test
+" alternate in it.
+nnoremap <leader>s :call FocusOnFile()<cr>
+function! FocusOnFile()
+  tabnew %
+  normal! v
+  normal! l
+  call OpenTestAlternate()
+  normal! h
+endfunction
+
+
+function! OpenTestAlternate()
+  let new_file = AlternateForCurrentFile()
+  exec ':e ' . new_file
+endfunction
+function! AlternateForCurrentFile()
+  let current_file = expand("%")
+  let new_file = current_file
+  let in_spec = match(current_file, '^spec/') != -1
+  let going_to_spec = !in_spec
+  let in_app = match(current_file, '\<controllers\>') != -1 || match(current_file, '\<models\>') != -1 || match(current_file, '\<views\>') != -1 || match(current_file, '\<helpers\>') != -1
+  if going_to_spec
+    if in_app
+      let new_file = substitute(new_file, '^app/', '', '')
+    end
+    let new_file = substitute(new_file, '\.e\?rb$', '_spec.rb', '')
+    let new_file = 'spec/' . new_file
+  else
+    let new_file = substitute(new_file, '_spec\.rb$', '.rb', '')
+    let new_file = substitute(new_file, '^spec/', '', '')
+    if in_app
+      let new_file = 'app/' . new_file
+    end
+  endif
+  return new_file
+endfunction
+nnoremap <leader>. :call OpenTestAlternate()<cr>
 
 " Pytest
 "nmap <silent><Leader>f <Esc>:Pytest file<CR>
@@ -85,6 +156,8 @@ nmap <leader>a <Esc>:Ack!
 "map <Leader>a :call RunAllTests()<CR>
 
 
+let g:vroom_map_keys = 1
+
 " Add the virtualenv's site-packages to vim path
 py << EOF
 import os.path
@@ -98,7 +171,6 @@ if 'VIRTUAL_ENV' in os.environ:
 EOF
 
 
-:set colorcolumn=80
 
 " Find and Replace
 vnoremap <silent> s //e<C-r>=&selection=='exclusive'?'+1':''<CR><CR>
@@ -121,5 +193,9 @@ let g:jedi#goto_definitions_command = ""
 let g:jedi#documentation_command = "K"
 let g:jedi#usages_command = "<leader>n"
 let g:jedi#completions_command = "<C-Space>"
-let g:jedi#rename_command = "<leader>r"
+let g:jedi#rename_command = "<leader>re"
 let g:jedi#use_tabs_not_buffers = 1
+
+
+function! s:Highlight_Matching_Pair()
+endfunction
