@@ -10,8 +10,8 @@ call vundle#end()
 
 
 " Powerline Setup
-set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 9
-set laststatus=2
+" set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 9
+" set laststatus=2
 
 "set foldmethod=indent
 "set foldlevel=99
@@ -41,16 +41,15 @@ syntax on
 " ---------------------------------------------------------------------------
 " vim put swap, backup and undo files in a special location instead 
 " of the working directory of the file being edited:
+" ---------------------------------------------------------------------------
 set backupdir=~/.vim/backup//
 set directory=~/.vim/swap//
 set undodir=~/.vim/undo//
 
-
-
 " ==========================================================================
 " COLORS
 " ---------------------------------------------------------------------------
-"set cursorline
+set cursorline
 set cursorcolumn
 set background=dark
 
@@ -66,7 +65,7 @@ colorscheme hybrid
 "set guifont=Monaco:h12
 
 
-autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+" autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
 
 autocmd FileType python set sw=4
 autocmd FileType python set ts=4
@@ -84,7 +83,7 @@ autocmd FileType python set sts=4
 
 
 " ------------------------------------------------------
-" KEY MAPS
+" BASIC KEY MAPS
 " -----------------------------------------------------
 " Clipboard register
 map <leader>y "*y
@@ -111,6 +110,20 @@ function! FocusOnFile()
   normal! l
   call OpenTestAlternate()
   normal! h
+endfunction
+
+" ------------------------------------------------------
+" RUN THE CURRENT FILE (PYTHON|RUBY|SHELL)
+" -----------------------------------------------------
+nnoremap <leader>e :call ExecuteFile()<cr>
+function! ExecuteFile()
+  if &filetype=='python'
+    !python %
+  elseif &filetype=='sh'
+    !./%
+  elseif &filetype=='ruby'
+    echo "Ruby runner not implemented"
+  endif
 endfunction
 
 
@@ -156,7 +169,14 @@ nnoremap <leader>. :call OpenTestAlternate()<cr>
 "map <Leader>a :call RunAllTests()<CR>
 
 
-let g:vroom_map_keys = 1
+" ------------------------------------------------------
+" VROOM PLUGIN CONFIG
+" -----------------------------------------------------
+" Map default keys to run tests (Default 1)
+let g:vroom_map_keys = 0 
+nnoremap <leader>t :VroomRunTestFile<cr>
+nnoremap <leader>T :VroomRunNearestTest<cr>
+nnoremap <leader>l :VroomRunLastTest<cr>
 
 " Add the virtualenv's site-packages to vim path
 py << EOF
