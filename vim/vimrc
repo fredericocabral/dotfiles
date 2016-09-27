@@ -36,7 +36,7 @@ set backupdir=~/.vim/backup//
 set directory=~/.vim/swap//
 set undodir=~/.vim/undo//
 
-" ==========================================================================
+" ===========================================================================
 " COLORS
 " ---------------------------------------------------------------------------
 set cursorline
@@ -55,9 +55,9 @@ colorscheme hybrid
 "set guifont=Monaco:h12
 
 
-" ------------------------------------------------------
+" ===========================================================================
 " BASIC KEY MAPS
-" -----------------------------------------------------
+" ---------------------------------------------------------------------------
 " Clipboard register
 map <leader>y "*y
 map <leader>p "*p
@@ -72,11 +72,11 @@ map <c-h> <c-w>h
 map <C-n> :NERDTreeToggle<CR>
 
 "Ack Search"
-nmap <leader>a <Esc>:Ack!
+nmap <leader>f <Esc>:Ack!
 
-" ------------------------------------------------------
+" ===========================================================================
 " RUN THE CURRENT FILE (PYTHON|RUBY|SHELL)
-" -----------------------------------------------------
+" ---------------------------------------------------------------------------
 nnoremap <leader>e :call ExecuteFile()<cr>
 function! ExecuteFile()
   if &filetype=='python'
@@ -84,13 +84,23 @@ function! ExecuteFile()
   elseif &filetype=='sh'
     !./%
   elseif &filetype=='ruby'
-    echo "Ruby runner not implemented"
+    echo "TODO: Ruby runner not implemented"
   endif
+endfunction
+
+
+" ===========================================================================
+" OPEN THE RSPEC FILE OF A GIVEN RUBY FILE(CONTROLLER, MODEL, ETC)
+" ---------------------------------------------------------------------------
+nnoremap <leader>a :call OpenTestAlternate()<cr>
+function! OpenTestAlternate()
+  let new_file = AlternateForCurrentFile()
+  exec ':vsplit ' . new_file
 endfunction
 
 " Close all other windows, open a vertical split, and open this file's test
 " alternate in it.
-nnoremap <leader>s :call FocusOnFile()<cr>
+" nnoremap <leader>s :call FocusOnFile()<cr>
 function! FocusOnFile()
   tabnew %
   normal! v
@@ -99,10 +109,6 @@ function! FocusOnFile()
   normal! h
 endfunction
 
-function! OpenTestAlternate()
-  let new_file = AlternateForCurrentFile()
-  exec ':e ' . new_file
-endfunction
 function! AlternateForCurrentFile()
   let current_file = expand("%")
   let new_file = current_file
@@ -124,7 +130,6 @@ function! AlternateForCurrentFile()
   endif
   return new_file
 endfunction
-nnoremap <leader>. :call OpenTestAlternate()<cr>
 
 " ------------------------------------------------------
 " VROOM PLUGIN CONFIG
