@@ -1,20 +1,5 @@
-
 call pathogen#infect()
 call pathogen#helptags()
-
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'Valloric/YouCompleteMe'
-call vundle#end()
-
-
-" Powerline Setup
-" set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 9
-" set laststatus=2
-
-"set foldmethod=indent
-"set foldlevel=99
 
 set number
 "autocmd InsertEnter * :set number
@@ -25,16 +10,21 @@ set expandtab
 set ruler
 set colorcolumn=80
 
-"version for regex used by vim. 
-"For some reasons the recent regex engine slow the vim performance for ruby
-set re=1 
-
-
 filetype on
 filetype plugin indent on
 filetype plugin on 
 filetype indent on
 syntax on
+
+autocmd FileType python set sw=4
+autocmd FileType python set ts=4
+autocmd FileType python set sts=4
+
+" ==========================================================================
+" Version for regex used by vim. For some reasons the recent regex 
+" engine slow the vim performance for ruby
+" ---------------------------------------------------------------------------
+set re=1 
 
 " ==========================================================================
 " SWAP
@@ -65,23 +55,6 @@ colorscheme hybrid
 "set guifont=Monaco:h12
 
 
-" autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
-
-autocmd FileType python set sw=4
-autocmd FileType python set ts=4
-autocmd FileType python set sts=4
-
-" Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'} 
-" Bundle 'alfredodeza/pytest.vim'
-" Bundle 'mindriot101/vim-pytest-runner'
-
-
-"autocmd BufWritePost *.py call Flake8()
-
-" let g:PyFlakeOnWrite = 1
-
-
-
 " ------------------------------------------------------
 " BASIC KEY MAPS
 " -----------------------------------------------------
@@ -101,17 +74,6 @@ map <C-n> :NERDTreeToggle<CR>
 "Ack Search"
 nmap <leader>a <Esc>:Ack!
 
-" Close all other windows, open a vertical split, and open this file's test
-" alternate in it.
-nnoremap <leader>s :call FocusOnFile()<cr>
-function! FocusOnFile()
-  tabnew %
-  normal! v
-  normal! l
-  call OpenTestAlternate()
-  normal! h
-endfunction
-
 " ------------------------------------------------------
 " RUN THE CURRENT FILE (PYTHON|RUBY|SHELL)
 " -----------------------------------------------------
@@ -126,6 +88,16 @@ function! ExecuteFile()
   endif
 endfunction
 
+" Close all other windows, open a vertical split, and open this file's test
+" alternate in it.
+nnoremap <leader>s :call FocusOnFile()<cr>
+function! FocusOnFile()
+  tabnew %
+  normal! v
+  normal! l
+  call OpenTestAlternate()
+  normal! h
+endfunction
 
 function! OpenTestAlternate()
   let new_file = AlternateForCurrentFile()
@@ -154,21 +126,6 @@ function! AlternateForCurrentFile()
 endfunction
 nnoremap <leader>. :call OpenTestAlternate()<cr>
 
-" Pytest
-"nmap <silent><Leader>f <Esc>:Pytest file<CR>
-"nmap <silent><Leader>c <Esc>:Pytest class<CR>
-"nmap <silent><Leader>m <Esc>:Pytest method<CR>
-"" cycle through test errors
-"nmap <silent><Leader>tn <Esc>:Pytest next<CR>
-"nmap <silent><Leader>tp <Esc>:Pytest previous<CR>
-"nmap <silent><Leader>te <Esc>:Pytest error<CR>
-
-"map <Leader>t :call RunCurrentTestFile()<CR>
-"map <Leader>s :call RunNearestTest()<CR>
-"map <Leader>l :call RunLastTest()<CR>
-"map <Leader>a :call RunAllTests()<CR>
-
-
 " ------------------------------------------------------
 " VROOM PLUGIN CONFIG
 " -----------------------------------------------------
@@ -190,18 +147,6 @@ if 'VIRTUAL_ENV' in os.environ:
     execfile(activate_this, dict(__file__=activate_this))
 EOF
 
-
-
-" Find and Replace
-vnoremap <silent> s //e<C-r>=&selection=='exclusive'?'+1':''<CR><CR>
-    \:<C-u>call histdel('search',-1)<Bar>let @/=histget('search',-1)<CR>gv
-omap s :normal vs<CR>
-
-
-"au WinLeave * set nocursorline nocursorcolumn
-"au WinEnter * set cursorline cursorcolumn
-"set cursorline cursorcolumn
-
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 
 let ropevim_vim_completion=0
@@ -215,7 +160,3 @@ let g:jedi#usages_command = "<leader>n"
 let g:jedi#completions_command = "<C-Space>"
 let g:jedi#rename_command = "<leader>re"
 let g:jedi#use_tabs_not_buffers = 1
-
-
-function! s:Highlight_Matching_Pair()
-endfunction
