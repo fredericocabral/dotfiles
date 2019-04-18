@@ -4,8 +4,8 @@ call pathogen#helptags()
 set backspace=indent,eol,start
 
 set number
-autocmd InsertEnter * :set number
-autocmd InsertLeave * :set relativenumber
+"autocmd InsertEnter * :set number
+"autocmd InsertLeave * :set relativenumber
 set tabstop=2
 set shiftwidth=2
 set expandtab
@@ -21,6 +21,16 @@ syntax on
 autocmd FileType python set sw=4
 autocmd FileType python set ts=4
 autocmd FileType python set sts=4
+
+" Run flake8 every time python file is saved
+" autocmd BufWritePost *.py call Flake8()
+
+" Run RuboCop every time a ruby file is saved
+" autocmd BufWritePost *.rb :RuboCop
+autocmd FileType ruby map <buffer> <leader>c :RuboCop<CR>
+
+
+" autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 " ==========================================================================
 " keys that I should never use
@@ -54,9 +64,9 @@ set undodir=~/.vim/undo//
 " ===========================================================================
 " COLORS
 " ---------------------------------------------------------------------------
- set cursorline
- set cursorcolumn
-" set background=dark
+ "set cursorline
+ "set cursorcolumn
+set background=dark
 
 "colorscheme solarized
 "colorscheme sourcerer
@@ -74,8 +84,8 @@ colorscheme hybrid
 " BASIC KEY MAPS
 " ---------------------------------------------------------------------------
 " Clipboard register
-map <leader>y "*y
-map <leader>p "*p
+"map <leader>y "*y
+"map <leader>p "*p
 "set clipboard=unnamed
 
 " move around splits
@@ -86,6 +96,7 @@ map <c-h> <c-w>h
 
 "NerdTree
 map <C-n> :NERDTreeToggle<CR>
+let g:NERDTreeDirArrows=0
 
 "Ack Search"
 nmap <leader>f <Esc>:Ack!
@@ -160,14 +171,26 @@ function! AlternateForCurrentFile()
   return new_file
 endfunction
 
+" -------------------------------------------------------
+" Pytest
+" -------------------------------------------------------
+autocmd FileType python nmap <silent><Leader>t <Esc>:Pytest file<CR>
+"autocmd FileType python nmap <silent><Leader>T <Esc>:Pytest class<CR>
+autocmd FileType python nmap <silent><Leader>T <Esc>:Pytest method<CR>
+autocmd FileType python nmap <silent><Leader>l <Esc>:Pytest last<CR>
+
 " ------------------------------------------------------
 " VROOM PLUGIN CONFIG
 " -----------------------------------------------------
 " Map default keys to run tests (Default 1)
 let g:vroom_map_keys = 0 
-nnoremap <leader>t :VroomRunTestFile<cr>
-nnoremap <leader>T :VroomRunNearestTest<cr>
-nnoremap <leader>l :VroomRunLastTest<cr>
+"nnoremap <leader>t :VroomRunTestFile<cr>
+"nnoremap <leader>T :VroomRunNearestTest<cr>
+"nnoremap <leader>l :VroomRunLastTest<cr>
+
+autocmd FileType ruby nnoremap <leader>t :VroomRunTestFile<cr>
+autocmd FileType ruby nnoremap <leader>T :VroomRunNearestTest<cr>
+autocmd FileType ruby nnoremap <leader>l :VroomRunLastTest<cr>
 
 " Add the virtualenv's site-packages to vim path
 "import os.path
@@ -194,3 +217,13 @@ let g:ctrlp_custom_ignore = 'tmp\|DS_Store\|git'
 "let g:jedi#completions_command = "<C-Space>"
 "let g:jedi#rename_command = "<leader>re"
 "let g:jedi#use_tabs_not_buffers = 1
+
+
+" Trigger configuration. Do not use <tab> if you use
+" https://github.com/Valloric/YouCompleteMe.
+"let g:UltiSnipsExpandTrigger="<tab>"
+"let g:UltiSnipsJumpForwardTrigger="<c-b>"
+"let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+"
+" If you want :UltiSnipsEdit to split your window.
+"let g:UltiSnipsEditSplit="vertical"
