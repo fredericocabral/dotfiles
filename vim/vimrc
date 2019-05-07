@@ -22,8 +22,13 @@ autocmd FileType python set sw=4
 autocmd FileType python set ts=4
 autocmd FileType python set sts=4
 
+
+" Flagging Unnecessary Whitespace
+" au BufRead,BufNewFile *.py,*.pyw,*.c,*.h, *.rb match BadWhitespace /\s\+$/
+
 " Run flake8 every time python file is saved
 " autocmd BufWritePost *.py call Flake8()
+" autocmd BufWritePost *.py call Mypy
 
 " Run RuboCop every time a ruby file is saved
 " autocmd BufWritePost *.rb :RuboCop
