@@ -22,17 +22,37 @@ autocmd FileType python set sw=4
 autocmd FileType python set ts=4
 autocmd FileType python set sts=4
 
+"autocmd winenter * execute winnr() * 2 . 'wincmd >'
+autocmd winenter * vertical resize 80
+
+
 
 " Flagging Unnecessary Whitespace
 " au BufRead,BufNewFile *.py,*.pyw,*.c,*.h, *.rb match BadWhitespace /\s\+$/
 
 " Run flake8 every time python file is saved
+" autocmd BufWritePost *.py call flake8#Flake8()
+"
 " autocmd BufWritePost *.py call Flake8()
 " autocmd BufWritePost *.py call Mypy
 
 " Run RuboCop every time a ruby file is saved
 " autocmd BufWritePost *.rb :RuboCop
 autocmd FileType ruby map <buffer> <leader>c :RuboCop<CR>
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+nmap <leader>c :SyntasticCheck<CR>
+
+
+let g:syntastic_mode_map = { 'mode': 'passive',
+                            \ 'passive_filetypes': ['python', 'javascript'] }
 
 
 " autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
@@ -92,6 +112,10 @@ colorscheme hybrid
 "map <leader>y "*y
 "map <leader>p "*p
 "set clipboard=unnamed
+"
+"map <C-m> :!mypy % --disallow-untyped-defs<CR>
+map <leader>t :!pytest % <CR>
+map <leader>p :!pylint % <CR>
 
 " move around splits
 map <c-j> <c-w>j
@@ -139,8 +163,15 @@ endfunction
 " ---------------------------------------------------------------------------
 nnoremap <leader>a :call OpenTestAlternate()<cr>
 function! OpenTestAlternate()
-  let new_file = AlternateForCurrentFile()
-  exec ':vsplit ' . new_file
+  if &filetype=='python'
+    let new_file = AlternateForCurrentFilePython()
+    exec ':vsplit ' . new_file
+  endif
+
+  if &filetype=='ruby'
+    let new_file = AlternateForCurrentFile()
+    exec ':vsplit ' . new_file
+  endif
 endfunction
 
 " Close all other windows, open a vertical split, and open this file's test
@@ -152,6 +183,30 @@ function! FocusOnFile()
   normal! l
   call OpenTestAlternate()
   normal! h
+endfunction
+
+function! AlternateForCurrentFilePython()
+  let current_file = expand("%")
+  let new_file = current_file
+  let in_tests = match(current_file, '^tests/') != -1
+  let going_to_tests = !in_tests
+  let in_app = match(current_file, '\<search\>') != -1 
+  if going_to_tests
+    if in_app
+      let new_file = substitute(new_file, '^app/', '', '')
+    end
+    let new_file = substitute(new_file, 'search/', '', '') "Remove search from the path. There is no 'search' inside test folder
+    let python_file = split(new_file, '([^/]+)$')
+    let new_file = substitute(new_file, '/*$', python_file[1], '')
+    let new_file = 'tests/unit/' . new_file
+  else
+    let new_file = substitute(new_file, '_spec\.rb$', '.rb', '')
+    let new_file = substitute(new_file, '^spec/', '', '')
+    if in_app
+      let new_file = 'app/' . new_file
+    end
+  endif
+  return new_file
 endfunction
 
 function! AlternateForCurrentFile()
@@ -179,10 +234,10 @@ endfunction
 " -------------------------------------------------------
 " Pytest
 " -------------------------------------------------------
-autocmd FileType python nmap <silent><Leader>t <Esc>:Pytest file<CR>
-"autocmd FileType python nmap <silent><Leader>T <Esc>:Pytest class<CR>
-autocmd FileType python nmap <silent><Leader>T <Esc>:Pytest method<CR>
-autocmd FileType python nmap <silent><Leader>l <Esc>:Pytest last<CR>
+"autocmd FileType python nmap <silent><Leader>t <Esc>:Pytest file<CR>
+""autocmd FileType python nmap <silent><Leader>T <Esc>:Pytest class<CR>
+"autocmd FileType python nmap <silent><Leader>T <Esc>:Pytest method<CR>
+"autocmd FileType python nmap <silent><Leader>l <Esc>:Pytest last<CR>
 
 " ------------------------------------------------------
 " VROOM PLUGIN CONFIG
@@ -193,9 +248,9 @@ let g:vroom_map_keys = 0
 "nnoremap <leader>T :VroomRunNearestTest<cr>
 "nnoremap <leader>l :VroomRunLastTest<cr>
 
-autocmd FileType ruby nnoremap <leader>t :VroomRunTestFile<cr>
-autocmd FileType ruby nnoremap <leader>T :VroomRunNearestTest<cr>
-autocmd FileType ruby nnoremap <leader>l :VroomRunLastTest<cr>
+"autocmd FileType ruby nnoremap <leader>t :VroomRunTestFile<cr>
+"autocmd FileType ruby nnoremap <leader>T :VroomRunNearestTest<cr>
+"autocmd FileType ruby nnoremap <leader>l :VroomRunLastTest<cr>
 
 " Add the virtualenv's site-packages to vim path
 "import os.path
@@ -216,12 +271,12 @@ let g:ctrlp_custom_ignore = 'tmp\|DS_Store\|git'
 
 "let g:jedi#goto_command = "<leader>d"
 "let g:jedi#goto_assignments_command = "<leader>g"
-"let g:jedi#goto_definitions_command = "<leader>q"
+let g:jedi#goto_definitions_command = "<leader>d"
 "let g:jedi#documentation_command = "K"
-"let g:jedi#usages_command = "<leader>n"
+let g:jedi#usages_command = "<leader>u"
 "let g:jedi#completions_command = "<C-Space>"
 "let g:jedi#rename_command = "<leader>re"
-"let g:jedi#use_tabs_not_buffers = 1
+let g:jedi#use_tabs_not_buffers = 1
 
 
 " Trigger configuration. Do not use <tab> if you use
