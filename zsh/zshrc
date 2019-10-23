@@ -90,8 +90,10 @@ source $ZSH/oh-my-zsh.sh
 
 
 export WORKON_HOME=$HOME/.virtualenvs
-export PROJECT_HOME=$HOME/src
-source /usr/local/bin/virtualenvwrapper.sh
+export PROJECT_HOME=$HOME/workspace
+eval "$(pyenv init -)"
+pyenv virtualenvwrapper_lazy
+#source /usr/local/bin/virtualenvwrapper.sh
 
 
 # GIT ALIAS
@@ -100,7 +102,8 @@ alias ga='git add '
 alias gb='git branch '
 alias gc='git commit'
 alias gd='git diff'
-# alias go='git checkout '
+alias gco='git checkout '
+alias gps='git push '
 alias gf='git fetch'
 alias gk='gitk --all&'
 alias gx='gitx --all'
@@ -108,200 +111,6 @@ alias gx='gitx --all'
 alias got='git '
 alias get='git '
 
-# INFRA ALIAS CANADA STAGING
-alias staging-ca-ssh='./manager_ecs.py dashboard-ca-staging.yaml --ssh-appid=dashboard-ca-staging --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-staging.pem'
-alias staging-ca-info='./manager_ecs.py dashboard-ca-staging.yaml -i'
-staging-ca-deploy() { ./manager_ecs.py dashboard-ca-staging.yaml -d --deploy-version=$1 }
-alias staging-ca-deploy=staging-ca-deploy
-
-# INFRA ALIAS CANADA PRODUCTION
-alias production-ca-ssh='./manager_ecs.py dashboard-ca-production.yaml --ssh-appid=dashboard-ca-production --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-production'
-alias production-ca-info='./manager_ecs.py dashboard-ca-production.yaml -i'
-production-ca-deploy() { ./manager_ecs.py dashboard-ca-production.yaml -d --deploy-version=$1 }
-alias production-ca-deploy=production-ca-deploy
-
-# INFRA ALIAS AUSTRALIA STAGING
-alias staging-au-ssh='./manager_ecs.py dashboard-au-staging.yaml --ssh-appid=dashboard-au-staging --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-staging.pem'
-alias staging-au-info='./manager_ecs.py dashboard-au-staging.yaml -i'
-staging-au-deploy() { ./manager_ecs.py dashboard-au-staging.yaml -d --deploy-version=$1 }
-alias staging-au-deploy=staging-au-deploy
-
-# INFRA ALIAS AUSTRALIA PRODUCTION
-alias production-au-ssh='./manager_ecs.py dashboard-au-production.yaml --ssh-appid=dashboard-au-production --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-production'
-alias production-au-info='./manager_ecs.py dashboard-au-production.yaml -i'
-production-au-deploy() { ./manager_ecs.py dashboard-au-production.yaml -d --deploy-version=$1 }
-alias production-au-deploy=production-au-deploy
-
-# INFRA ALIAS FRANCE STAGING
-alias staging-fr-ssh='./manager_ecs.py dashboard-fr-staging.yaml --ssh-appid=dashboard-fr-staging --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-staging.pem'
-alias staging-fr-info='./manager_ecs.py dashboard-fr-staging.yaml -i'
-staging-fr-deploy() { ./manager_ecs.py dashboard-fr-staging.yaml -d --deploy-version=$1 }
-alias staging-fr-deploy=staging-fr-deploy
-
-# INFRA ALIAS FRANCE PRODUCTION
-alias production-fr-ssh='./manager_ecs.py dashboard-fr-production.yaml --ssh-appid=dashboard-fr-production --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-production'
-alias production-fr-info='./manager_ecs.py dashboard-fr-production.yaml -i'
-production-fr-deploy() { ./manager_ecs.py dashboard-fr-production.yaml -d --deploy-version=$1 }
-alias production-fr-deploy=production-fr-deploy
-
-
-# INFRA ALIAS AUSTRIA STAGING
-alias staging-at-ssh='./manager_ecs.py dashboard-at-staging.yaml --ssh-appid=dashboard-at-staging --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-staging.pem'
-alias staging-at-info='./manager_ecs.py dashboard-at-staging.yaml -i'
-staging-at-deploy() { ./manager_ecs.py dashboard-at-staging.yaml -d --deploy-version=$1 }
-alias staging-at-deploy=staging-at-deploy
-
-# INFRA ALIAS AUSTRIA PRODUCTION
-alias production-at-ssh='./manager_ecs.py dashboard-at-production.yaml --ssh-appid=dashboard-at-production --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-production'
-alias production-at-info='./manager_ecs.py dashboard-at-production.yaml -i'
-production-at-deploy() { ./manager_ecs.py dashboard-at-production.yaml -d --deploy-version=$1 }
-alias production-at-deploy=production-at-deploy
-
-# INFRA ALIAS FINLAND  STAGING
-alias staging-fi-ssh='./manager_ecs.py dashboard-fi-staging.yaml --ssh-appid=dashboard-fi-staging --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-staging.pem'
-alias staging-fi-info='./manager_ecs.py dashboard-fi-staging.yaml -i'
-staging-fi-deploy() { ./manager_ecs.py dashboard-fi-staging.yaml -d --deploy-version=$1 }
-alias staging-fi-deploy=staging-fi-deploy
-
-# INFRA ALIAS FINLAND  PRODUCTION
-alias production-fi-ssh='./manager_ecs.py dashboard-fi-production.yaml --ssh-appid=dashboard-fi-production --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-production'
-alias production-fi-info='./manager_ecs.py dashboard-fi-production.yaml -i'
-production-fi-deploy() { ./manager_ecs.py dashboard-fi-production.yaml -d --deploy-version=$1 }
-alias production-fi-deploy=production-fi-deploy
-
-# INFRA ALIAS NETHERLANDS  STAGING
-alias staging-nl-ssh='./manager_ecs.py dashboard-nl-staging.yaml --ssh-appid=dashboard-nl-staging --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-staging.pem'
-alias staging-nl-info='./manager_ecs.py dashboard-nl-staging.yaml -i'
-staging-nl-deploy() { ./manager_ecs.py dashboard-nl-staging.yaml -d --deploy-version=$1 }
-alias staging-nl-deploy=staging-nl-deploy
-
-# INFRA ALIAS NETHERLANDS PRODUCTION
-alias production-nl-ssh='./manager_ecs.py dashboard-nl-production.yaml --ssh-appid=dashboard-nl-production --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-production'
-alias production-nl-info='./manager_ecs.py dashboard-nl-production.yaml -i'
-production-nl-deploy() { ./manager_ecs.py dashboard-nl-production.yaml -d --deploy-version=$1 }
-alias production-nl-deploy=production-nl-deploy
-
-
-# INFRA ALIAS NORWAY STAGING
-alias staging-no-ssh='./manager_ecs.py dashboard-no-staging.yaml --ssh-appid=dashboard-no-staging --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-staging.pem'
-alias staging-no-info='./manager_ecs.py dashboard-no-staging.yaml -i'
-staging-no-deploy() { ./manager_ecs.py dashboard-no-staging.yaml -d --deploy-version=$1 }
-alias staging-no-deploy=staging-no-deploy
-
-# INFRA ALIAS NORWAY PRODUCTION
-alias production-no-ssh='./manager_ecs.py dashboard-no-production.yaml --ssh-appid=dashboard-no-production --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-production'
-alias production-no-info='./manager_ecs.py dashboard-no-production.yaml -i'
-production-no-deploy() { ./manager_ecs.py dashboard-no-production.yaml -d --deploy-version=$1 }
-alias production-no-deploy=production-no-deploy
-
-# INFRA ALIAS SWEDEN STAGING
-alias staging-se-ssh='./manager_ecs.py dashboard-se-staging.yaml --ssh-appid=dashboard-se-staging --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-staging.pem'
-alias staging-se-info='./manager_ecs.py dashboard-se-staging.yaml -i'
-staging-se-deploy() { ./manager_ecs.py dashboard-se-staging.yaml -d --deploy-version=$1 }
-alias staging-se-deploy=staging-se-deploy
-
-# INFRA ALIAS SWEDEN  PRODUCTION
-alias production-se-ssh='./manager_ecs.py dashboard-se-production.yaml --ssh-appid=dashboard-se-production --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-production'
-alias production-se-info='./manager_ecs.py dashboard-se-production.yaml -i'
-production-se-deploy() { ./manager_ecs.py dashboard-se-production.yaml -d --deploy-version=$1 }
-alias production-se-deploy=production-se-deploy
-
-# INFRA ALIAS GERMANY STAGING
-alias staging-de-ssh='./manager_ecs.py dashboard-de-staging.yaml --ssh-appid=dashboard-de-staging --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-staging.pem'
-alias staging-de-info='./manager_ecs.py dashboard-de-staging.yaml -i'
-staging-de-deploy() { ./manager_ecs.py dashboard-de-staging.yaml -d --deploy-version=$1 }
-alias staging-de-deploy=staging-de-deploy
-
-# INFRA ALIAS GERMANY PRODUCTION
-alias production-de-ssh='./manager_ecs.py dashboard-de-production.yaml --ssh-appid=dashboard-de-production --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-production'
-alias production-de-info='./manager_ecs.py dashboard-de-production.yaml -i'
-production-de-deploy() { ./manager_ecs.py dashboard-de-production.yaml -d --deploy-version=$1 }
-alias production-de-deploy=production-de-deploy
-
-# INFRA ALIAS ITALY  STAGING
-alias staging-it-ssh='./manager_ecs.py dashboard-it-staging.yaml --ssh-appid=dashboard-it-staging --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-staging.pem'
-alias staging-it-info='./manager_ecs.py dashboard-it-staging.yaml -i'
-staging-it-itploy() { ./manager_ecs.py dashboard-it-staging.yaml -d --itploy-version=$1 }
-alias staging-it-itploy=staging-it-itploy
-
-# INFRA ALIAS ITALY PRODUCTION
-alias production-it-ssh='./manager_ecs.py dashboard-it-production.yaml --ssh-appid=dashboard-it-production --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-production'
-alias production-it-info='./manager_ecs.py dashboard-it-production.yaml -i'
-production-it-deploy() { ./manager_ecs.py dashboard-it-production.yaml -d --deploy-version=$1 }
-alias production-it-deploy=production-it-deploy
-
-# INFRA ALIAS USER-API STAGING
-alias user-api-staging-ssh='./manager_ecs.py user-api-eu-staging.yaml --ssh-appid=user-api-eu-staging --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-staging.pem'
-alias user-api-staging-info='./manager_ecs.py user-api-eu-staging.yaml -i'
-user-api-staging-deploy() { ./manager_ecs.py user-api-eu-staging.yaml -d --deploy-version=$1 }
-alias user-api-staging-deploy=user-api-staging-deploy
-
-# INFRA ALIAS USER-API EUROPE PRODUCTION
-alias user-api-eu-production-ssh='./manager_ecs.py user-api-eu-production.yaml --ssh-appid=user-api-eu-production --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-production'
-alias user-api-eu-production-info='./manager_ecs.py user-api-eu-production.yaml -i'
-user-api-eu-production-deploy() { ./manager_ecs.py user-api-eu-production.yaml -d --deploy-version=$1 }
-alias user-api-eu-production-deploy=user-api-eu-production-deploy
-
-# INFRA ALIAS USER-API AUSTRALIA PRODUCTION
-alias user-api-au-production-ssh='./manager_ecs.py user-api-au-production.yaml --ssh-appid=user-api-au-production --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-production'
-alias user-api-au-production-info='./manager_ecs.py user-api-au-production.yaml -i'
-user-api-au-production-deploy() { ./manager_ecs.py user-api-au-production.yaml -d --deploy-version=$1 }
-alias user-api-au-production-deploy=user-api-au-production-deploy
-
-# INFRA ALIAS USER-API CANADA PRODUCTION
-alias user-api-ca-production-ssh='./manager_ecs.py user-api-ca-production.yaml --ssh-appid=user-api-ca-production --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-production'
-alias user-api-ca-production-info='./manager_ecs.py user-api-ca-production.yaml -i'
-user-api-ca-production-deploy() { ./manager_ecs.py user-api-ca-production.yaml -d --deploy-version=$1 }
-alias user-api-ca-production-deploy=user-api-ca-production-deploy
-
-# INFRA ALIAS MOBILE-SYNC-API STAGING
-alias mobile-api-staging-ssh='./manager_ecs.py mobile-api-eu-staging.yaml --ssh-appid=mobile-api-eu-staging --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-staging.pem'
-alias mobile-api-staging-info='./manager_ecs.py mobile-api-eu-staging.yaml -i'
-mobile-api-staging-deploy() { ./manager_ecs.py mobile-api-eu-staging.yaml -d --deploy-version=$1 }
-alias mobile-api-staging-deploy=mobile-api-staging-deploy
-
-# INFRA ALIAS GATEWAY-EU-STAGING
-alias gateway-eu-staging-ssh='./manager_ecs.py gateway-eu-staging.yaml --ssh-appid=gateway-eu-staging --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-staging.pem'
-alias gateway-eu-staging-info='./manager_ecs.py gateway-eu-staging.yaml -i'
-gateway-eu-staging-deploy() { ./manager_ecs.py gateway-eu-staging.yaml -d --deploy-version=$1 }
-alias gateway-eu-staging-deploy=gateway-eu-staging-deploy
-
-# INFRA ALIAS GATEWAY-EU-PRODUCTION
-alias gateway-eu-production-ssh='./manager_ecs.py gateway-eu-production.yaml --ssh-appid=gateway-eu-production --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-production'
-alias gateway-eu-production-info='./manager_ecs.py gateway-eu-production.yaml -i'
-gateway-eu-production-deploy() { ./manager_ecs.py gateway-eu-production.yaml -d --deploy-version=$1 }
-alias gateway-eu-production-deploy=gateway-eu-production-deploy
-
-# INFRA ALIAS GATEWAY-CA-PRODUCTION
-alias gateway-ca-production-ssh='./manager_ecs.py gateway-ca-production.yaml --ssh-appid=gateway-ca-production --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-production'
-alias gateway-ca-production-info='./manager_ecs.py gateway-ca-production.yaml -i'
-gateway-ca-production-deploy() { ./manager_ecs.py gateway-ca-production.yaml -d --deploy-version=$1 }
-alias gateway-ca-production-deploy=gateway-ca-production-deploy
-
-# INFRA ALIAS GATEWAY-AU-PRODUCTION
-alias gateway-au-production-ssh='./manager_ecs.py gateway-au-production.yaml --ssh-appid=gateway-au-production --ssh-pub-key-path=/Users/frederico.cabral/.ssh/logistics-production'
-alias gateway-au-production-info='./manager_ecs.py gateway-au-production.yaml -i'
-gateway-au-production-deploy() { ./manager_ecs.py gateway-au-production.yaml -d --deploy-version=$1 }
-alias gateway-au-production-deploy=gateway-au-production-deploy
-
-# Kubernets
-#alias kubectl-log-stg="kubectl --kubeconfig=$HOME/.kube/kubernetes-staging/kubeconfig"
-alias kubectl-log-stg="kubectl --kubeconfig=$HOME/.kube_tool/staging"
-alias kubectl-log-qa="kubectl --kubeconfig=$HOME/.kube/kubernetes-qa/kubeconfig"
-#alias kubectl-log-prd-us="kubectl --kubeconfig=$HOME/.kube/kubernetes-production-us/kubeconfig"
-alias kubectl-log-prd-us="kubectl --kubeconfig=$HOME/.kube_tool/production-us"
-alias kubectl-log-prd-eu="kubectl --kubeconfig=$HOME/.kube_tool/production-eu"
-alias kubectl-log-prd-ap="kubectl --kubeconfig=$HOME/.kube_tool/production-ap"
-
-alias kubectl-log-qa-proxy="kubectl-log-qa proxy --port 9995"
-alias kubectl-log-stg-proxy="kubectl-log-stg proxy --port 9996"
-alias kubectl-log-prd-us-proxy="kubectl-log-prd-us proxy --port 9997"
-alias kubectl-log-prd-ap-proxy="kubectl-log-prd-ap proxy --port 9998"
-alias kubectl-log-prd-eu-proxy="kubectl-log-prd-eu proxy --port 9999"
-
-#POSTGRE
-export PGDATA="/Users/frederico.cabral/Library/Application Support/Postgres/var-9.5"
-export PATH="$PATH:/Applications/Postgres.app/Contents/Versions/9.5/bin"
 
 #RVM
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
@@ -310,21 +119,6 @@ export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 export PATH=$PATH:/usr/local/go/bin
 export GOPATH=$HOME/src
 
-#REDIS
-export TI_CLOUD_KEY=test CORE_PORT=3001 rake
-
-#ONE_LOGIN
-alias one_login='~/src/logistics-infra-tools/Security-Login/assume_role_onelogin.sh frederico.cabral@foodora.com'
-
-# ALIAS SSH
-export LOGISTICS_STAGING_IPADDR_DE="54.229.169.254"
-export STAGING_RDS_URL_DE="logistics-staging.ctrvbm6vb3gq.eu-west-1.rds.amazonaws.com"
-alias stagingrdstunnelDE="ssh ec2-user@${LOGISTICS_STAGING_IPADDR_DE} -i ~/.ssh/logistics-staging.pem -L:5434:${STAGING_RDS_URL_DE}:5432"
-alias dashboard="cd ~/src/log-dispatcher-dashboard"
-
-
-alias vi="mvim -v"
-alias vim="mvim -v"
 
 # added by travis gem
 [ -f /Users/frederico.cabral/.travis/travis.sh ] && source /Users/frederico.cabral/.travis/travis.sh
@@ -345,3 +139,5 @@ bindkey "^R" history-incremental-search-backward
 # tabtab source for sls package
 # uninstall by removing these lines or running `tabtab uninstall sls`
 [[ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh ]] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh
+export PATH=$PATH:/Users/frederico.cabral/.virtualenvs/gygdev//bin
+. /Users/frederico.cabral/.gygdev/completion.sh
