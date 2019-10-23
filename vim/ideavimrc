@@ -6,3 +6,4 @@ let mapleader = "\"
 map <leader>f :action Find<CR>
 map <leader>l :action Rerun<CR>
 map <leader>c :action CompileProject<CR>
+map <leader>r :action RenameElement<CR>
