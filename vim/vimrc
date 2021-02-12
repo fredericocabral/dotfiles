@@ -1,6 +1,8 @@
 call pathogen#infect()
 call pathogen#helptags()
 
+set autowrite
+
 set backspace=indent,eol,start
 
 set number
@@ -23,7 +25,9 @@ autocmd FileType python set ts=4
 autocmd FileType python set sts=4
 
 "autocmd winenter * execute winnr() * 2 . 'wincmd >'
-autocmd winenter * vertical resize 80
+
+"auto resize when doing TDD in a small screen
+"autocmd winenter * vertical resize 80
 
 
 
@@ -141,20 +145,17 @@ function! ExecuteFile()
     !./%
   elseif &filetype=='ruby'
     !ruby %
-  elseif &filetype=='go'
-    :GoRun
   endif
 endfunction
 
 " ===========================================================================
-" BUILD
+" GO LANG
 " ---------------------------------------------------------------------------
-nnoremap <leader>b :call BuildFile()<cr>
-function! BuildFile()
-  if &filetype=='go'
-    :GoBuild
-  endif
-endfunction
+autocmd FileType go nmap <leader>b  <Plug>(go-build)
+autocmd FileType go nmap <leader>r  <Plug>(go-run)
+
+let g:go_def_mode='gopls'
+let g:go_info_mode='gopls'
 
 
 

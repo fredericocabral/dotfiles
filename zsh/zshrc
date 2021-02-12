@@ -1,4 +1,6 @@
 # Path to your oh-my-zsh installation.
+ZSH_DISABLE_COMPFIX=true
+autoload -U +X compinit && compinit
 export ZSH=/Users/frederico.cabral/.oh-my-zsh
 
 export EDITOR='vim'
@@ -92,7 +94,7 @@ source $ZSH/oh-my-zsh.sh
 export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME/workspace
 eval "$(pyenv init -)"
-pyenv virtualenvwrapper_lazy
+#pyenv virtualenvwrapper_lazy
 #source /usr/local/bin/virtualenvwrapper.sh
 
 
@@ -112,12 +114,19 @@ alias got='git '
 alias get='git '
 
 
+#KAFKA
+export PATH="$PATH:/Users/frederico.cabral/kafka_2.12-2.0.0/bin"
+
+#FLUTTER
+export PATH="$PATH:/Users/frederico.cabral/workspace/flutter/bin"
+
+
 #RVM
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 
 #GO
 export PATH=$PATH:/usr/local/go/bin
-export GOPATH=$HOME/src
+export GOPATH=$HOME/workspace
 
 
 # added by travis gem
@@ -128,16 +137,11 @@ export GOPATH=$HOME/src
 export LDFLAGS=-L/usr/local/opt/openssl/lib
 export CPPFLAGS=-I/usr/local/opt/openssl/include
 export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_261.jdk/Contents/Home
 
 set -o vi
 bindkey "^R" history-incremental-search-backward
 
-# tabtab source for serverless package
-# uninstall by removing these lines or running `tabtab uninstall serverless`
-[[ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh ]] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh
-# tabtab source for sls package
-# uninstall by removing these lines or running `tabtab uninstall sls`
-[[ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh ]] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh
-export PATH=$PATH:/Users/frederico.cabral/.virtualenvs/gygdev//bin
-. /Users/frederico.cabral/.gygdev/completion.sh
+export KUBECONFIG=$HOME/.kube/config:$HOME/.kube/eksconfig
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
