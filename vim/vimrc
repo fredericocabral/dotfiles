@@ -34,19 +34,10 @@ autocmd FileType python set sts=4
 " Flagging Unnecessary Whitespace
 " au BufRead,BufNewFile *.py,*.pyw,*.c,*.h, *.rb match BadWhitespace /\s\+$/
 
-" Run flake8 every time python file is saved
-" autocmd BufWritePost *.py call flake8#Flake8()
-"
-" autocmd BufWritePost *.py call Flake8()
-" autocmd BufWritePost *.py call Mypy
 
-" Run RuboCop every time a ruby file is saved
-" autocmd BufWritePost *.rb :RuboCop
-autocmd FileType ruby map <buffer> <leader>c :RuboCop<CR>
-
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
 
 "let g:syntastic_always_populate_loc_list = 1
 "let g:syntastic_auto_loc_list = 1
@@ -134,22 +125,24 @@ let g:NERDTreeDirArrows=0
 "Ack Search"
 nmap <leader>f <Esc>:Ack!
 
-" ===========================================================================
-" RUN THE CURRENT FILE (PYTHON|RUBY|SHELL)
-" ---------------------------------------------------------------------------
-nnoremap <leader>e :call ExecuteFile()<cr>
-function! ExecuteFile()
-  if &filetype=='python'
-    !python %
-  elseif &filetype=='sh'
-    !./%
-  elseif &filetype=='ruby'
-    !ruby %
-  endif
-endfunction
 
 " ===========================================================================
-" GO LANG
+" RUBY
+" ---------------------------------------------------------------------------
+autocmd FileType ruby  map <buffer> <Leader>r :w<CR>:exec '!ruby' shellescape(@%, 1)<CR>
+" autocmd BufWritePost *.rb :RuboCop
+autocmd FileType ruby map <buffer> <leader>b :RuboCop<CR>
+
+" ===========================================================================
+" PYTHON
+" ---------------------------------------------------------------------------
+autocmd FileType python map <buffer> <Leader>r :w<CR>:exec '!python' shellescape(@%, 1)<CR>
+" autocmd FileType python map <buffer> <Leader>b :w<CR>:exec flake8#Flake8()<CR>
+" autocmd BufWritePost *.py call Flake8()
+" autocmd BufWritePost *.py call Mypy
+
+" ===========================================================================
+" GO 
 " ---------------------------------------------------------------------------
 autocmd FileType go nmap <leader>b  <Plug>(go-build)
 autocmd FileType go nmap <leader>r  <Plug>(go-run)
@@ -279,12 +272,3 @@ let g:jedi#usages_command = "<leader>u"
 "let g:jedi#rename_command = "<leader>re"
 let g:jedi#use_tabs_not_buffers = 1
 
-
-" Trigger configuration. Do not use <tab> if you use
-" https://github.com/Valloric/YouCompleteMe.
-"let g:UltiSnipsExpandTrigger="<tab>"
-"let g:UltiSnipsJumpForwardTrigger="<c-b>"
-"let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-"
-" If you want :UltiSnipsEdit to split your window.
-"let g:UltiSnipsEditSplit="vertical"
