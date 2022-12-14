@@ -14,6 +14,9 @@ source ~/dotfiles/tmux/tmuxinator/tmuxinator.zsh
 # time that oh-my-zsh is loaded.
 ZSH_THEME="robbyrussell"
 
+alias python="python3"
+
+
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
 
@@ -113,6 +116,13 @@ alias gx='gitx --all'
 alias got='git '
 alias get='git '
 
+curlj() {
+  curl "$1" | jq
+}
+
+
+# local/bi
+export PATH="/usr/local/bin:$PATH"
 
 #KAFKA
 export PATH="$PATH:/Users/frederico.cabral/kafka_2.12-2.0.0/bin"
@@ -125,8 +135,16 @@ export PATH="$PATH:/Users/frederico.cabral/workspace/flutter/bin"
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 
 #GO
-export PATH=$PATH:/usr/local/go/bin
-export GOPATH=$HOME/workspace
+#export PATH=$PATH:/usr/local/go/bin
+#export GOPATH=$HOME/workspace
+export DEFAULT_GO_VERSION="1.19"
+#export GOPATH=$HOME/workspace/go
+export GOPATH=~/go
+#export GOROOT=~/go
+export GOROOT="$(brew --prefix golang)/libexec"
+export PATH="$PATH:${GOPATH}/bin:${GOROOT}/bin"
+export PATH=$PATH:$HOME/go/bin/
+
 
 
 # added by travis gem
@@ -145,3 +163,9 @@ bindkey "^R" history-incremental-search-backward
 export KUBECONFIG=$HOME/.kube/config:$HOME/.kube/eksconfig
 export PATH="$HOME/.jenv/bin:$PATH"
 eval "$(jenv init -)"
+#export GITHUB_TOKEN=662710fcb8a04f6bcf6950d1cf251aa7cf424415
+export GITHUB_TOKEN=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
+
+
+# HELLOFRESH
+export VAULT_ADDR=https://vault.hellofresh.io

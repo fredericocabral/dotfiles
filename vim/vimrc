@@ -18,7 +18,7 @@ filetype on
 filetype plugin indent on
 filetype plugin on 
 filetype indent on
-syntax on
+syntax enable
 
 autocmd FileType python set sw=4
 autocmd FileType python set ts=4
@@ -89,8 +89,10 @@ set undodir=~/.vim/undo//
 set background=dark
 
 "colorscheme solarized
-"colorscheme sourcerer
+"colorscheme sourcerer"
 colorscheme hybrid
+"colorscheme monokai
+
 "colorscheme distinguished
 "colorscheme grb256
 "colorscheme distinguished
@@ -109,8 +111,10 @@ colorscheme hybrid
 "set clipboard=unnamed
 "
 "map <C-m> :!mypy % --disallow-untyped-defs<CR>
-map <leader>t :!pytest % <CR>
-map <leader>p :!pylint % <CR>
+"map <leader>t :!pytest % <CR>
+autocmd FileType python nmap <leader>t  :!pytest % <CR>
+"map <leader>p :!pylint % <CR>
+"
 
 " move around splits
 map <c-j> <c-w>j
@@ -124,6 +128,11 @@ let g:NERDTreeDirArrows=0
 
 "Ack Search"
 nmap <leader>f <Esc>:Ack!
+
+function! FormatJSON()
+  :%!python -m json.tool
+endfunction
+nnoremap <leader>j :call FormatJSON()<cr>
 
 
 " ===========================================================================
@@ -144,9 +153,38 @@ autocmd FileType python map <buffer> <Leader>r :w<CR>:exec '!python' shellescape
 " ===========================================================================
 " GO 
 " ---------------------------------------------------------------------------
-autocmd FileType go nmap <leader>b  <Plug>(go-build)
-autocmd FileType go nmap <leader>r  <Plug>(go-run)
+"autocmd FileType go nmap <leader>b <Plug>(go-build)
+"autocmd FileType go nmap <leader>r <Plug>(go-run)
+"autocmd FileType go nmap <leader>t <Plug>(go-test)
+"autocmd FileType go nmap <Leader>d <Plug>(go-def-tab)
+"autocmd FileType go nmap <Leader>e :GoRename<CR>
+"autocmd FileType go nmap <leader>a :GoAlternate<CR>
+"autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
 
+
+au FileType go nmap <leader>r <Plug>(go-run)
+au FileType go nmap <leader>b <Plug>(go-build)
+au FileType go nmap <leader>t <Plug>(go-test)
+au FileType go nmap <leader>c <Plug>(go-coverage-toggle)
+au FileType go nmap <Leader>d <Plug>(go-def-tab)
+au FileType go nmap <Leader>e <Plug>(go-rename)
+au FileType go nmap <Leader>s <Plug>(go-implements)
+au FileType go nmap <Leader>i <Plug>(go-info)
+au FileType go nmap <Leader>ds <Plug>(go-def-split)
+au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
+au FileType go nmap <leader>a :GoAlternate<CR>
+au FileType go nmap <Leader>ae <Plug>(go-alternate-edit)
+au FileType go nmap <Leader>av <Plug>(go-alternate-vertical)
+
+let g:completor_filetype_map = {}
+let g:completor_filetype_map.go = {'ft': 'lsp', 'cmd': 'gopls -remote=auto'}"
+
+let g:go_doc_popup_window = 1
+
+let g:go_auto_sameids = 1
+let g:go_fmt_command = "goimports"
+let g:go_metalinter_autosave_enabled = ['vet', 'golint']
+let g:go_metalinter_autosave = 1
 let g:go_def_mode='gopls'
 let g:go_info_mode='gopls'
 
@@ -155,7 +193,9 @@ let g:go_info_mode='gopls'
 " ===========================================================================
 " OPEN THE RSPEC FILE OF A GIVEN RUBY FILE(CONTROLLER, MODEL, ETC)
 " ---------------------------------------------------------------------------
-nnoremap <leader>a :call OpenTestAlternate()<cr>
+autocmd FileType python nmap <leader>a :call OpenTestAlternate()<CR>
+autocmd FileType ruby nmap <leader>a :call OpenTestAlternate()<cr>
+
 function! OpenTestAlternate()
   if &filetype=='python'
     let new_file = AlternateForCurrentFilePython()
