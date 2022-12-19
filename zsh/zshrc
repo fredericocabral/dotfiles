@@ -6,7 +6,7 @@ export ZSH=/Users/frederico.cabral/.oh-my-zsh
 export EDITOR='vim'
 
 # TMUXINATOR Completion
-source ~/dotfiles/tmux/tmuxinator/tmuxinator.zsh
+source ~/Workspace/dotfiles/tmux/tmuxinator/tmuxinator.zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -166,6 +166,3 @@ eval "$(jenv init -)"
 #export GITHUB_TOKEN=662710fcb8a04f6bcf6950d1cf251aa7cf424415
 export GITHUB_TOKEN=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
 
-
-# HELLOFRESH
-export VAULT_ADDR=https://vault.hellofresh.io
