@@ -1,6 +1,7 @@
 call pathogen#infect()
 call pathogen#helptags()
 
+
 set autowrite
 
 set backspace=indent,eol,start
@@ -13,6 +14,7 @@ set shiftwidth=2
 set expandtab
 set ruler
 set colorcolumn=80
+set cursorline
 
 filetype on
 filetype plugin indent on
@@ -24,16 +26,45 @@ autocmd FileType python set sw=4
 autocmd FileType python set ts=4
 autocmd FileType python set sts=4
 
+
+autocmd FileType go set sw=4
+autocmd FileType go set ts=4
+autocmd FileType go set sts=4
+
+set clipboard=unnamed
+set clipboard+=unnamedplus
+
+
+call plug#begin()
+"Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
+"Plug 'josa42/coc-go'
+"Plug 'weirongxu/coc-explorer'
+"Plug 'drewtempelmeyer/palenight.vim'
+"Plug 'mhartington/oceanic-next'
+Plug 'vim-test/vim-test'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+"Plug 'ghifarit53/tokyonight-vim'
+"
+
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'tpope/vim-dadbod'
+Plug 'github/copilot.vim'
+
+call plug#end()
+
+
+"Change snippets keybinding to <CTRL+J> instead of <TAB>
+let g:UltiSnipsExpandTrigger="<C-j>"
+
 "autocmd winenter * execute winnr() * 2 . 'wincmd >'
 
 "auto resize when doing TDD in a small screen
 "autocmd winenter * vertical resize 80
 
-
-
 " Flagging Unnecessary Whitespace
 " au BufRead,BufNewFile *.py,*.pyw,*.c,*.h, *.rb match BadWhitespace /\s\+$/
-
 
 "set statusline+=%#warningmsg#
 "set statusline+=%{SyntasticStatuslineFlag()}
@@ -68,7 +99,7 @@ nnoremap <Down>  <NOP>
 " Version for regex used by vim. For some reasons the recent regex 
 " engine slow the vim performance for ruby
 " ---------------------------------------------------------------------------
-set re=1 
+"set re=1 
 
 " ==========================================================================
 " SWAP
@@ -85,14 +116,20 @@ set undodir=~/.vim/undo//
 " COLORS
 " ---------------------------------------------------------------------------
  "set cursorline
- "set cursorcolumn
+set cursorcolumn
 set background=dark
+
+"set termguicolors
+"let g:tokyonight_style = 'night' " available: night, storm
+"let g:tokyonight_enable_italic = 1
+"colorscheme tokyonight
 
 "colorscheme solarized
 "colorscheme sourcerer"
 colorscheme hybrid
+"colorscheme base16-default-dark
+"colorscheme palenight
 "colorscheme monokai
-
 "colorscheme distinguished
 "colorscheme grb256
 "colorscheme distinguished
@@ -105,14 +142,10 @@ colorscheme hybrid
 " ===========================================================================
 " BASIC KEY MAPS
 " ---------------------------------------------------------------------------
-" Clipboard register
-"map <leader>y "*y
-"map <leader>p "*p
-"set clipboard=unnamed
-"
 "map <C-m> :!mypy % --disallow-untyped-defs<CR>
 "map <leader>t :!pytest % <CR>
 autocmd FileType python nmap <leader>t  :!pytest % <CR>
+"autocmd FileType go nmap <leader>t  :w<CR>:!go test %<CR>
 "map <leader>p :!pylint % <CR>
 "
 
@@ -129,10 +162,74 @@ let g:NERDTreeDirArrows=0
 "Ack Search"
 nmap <leader>f <Esc>:Ack!
 
+"JSON Formatter
 function! FormatJSON()
   :%!python -m json.tool
 endfunction
 nnoremap <leader>j :call FormatJSON()<cr>
+
+
+" ==========================================================================
+" AIRLINE CONFIG
+" --------------------------------------------------------------------------
+let g:airline_theme='angr'
+let g:airline#extensions#tabline#fnamemod = ':t'
+let g:airline#extensions#tabline#fnamecollapse = 0
+
+" ==========================================================================
+" COC VIM
+" --------------------------------------------------------------------------
+"Having longer updatetime (default is 4000 ms = 4s) 
+"leads to noticeable delays and poor user experience
+set updatetime=300
+"
+"Always show the signcolumn, otherwise it would shift the 
+"text each time diagnostics appear/become resolved
+set signcolumn=yes
+
+" Use tab for trigger completion with characters ahead and navigate
+" NOTE: There's always complete item selected by default, you may want to enable
+" no select by `"suggest.noselect": true` in your configuration file
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config
+"inoremap <silent><expr> <TAB>
+"      \ coc#pum#visible() ? coc#pum#next(1) :
+"      \ CheckBackspace() ? "\<Tab>" :
+"      \ coc#refresh()
+"inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
+
+" Use <C-l> for trigger snippet expand.
+imap <C-l> <Plug>(coc-snippets-expand)
+
+" Use <C-j> for select text for visual placeholder of snippet.
+vmap <C-j> <Plug>(coc-snippets-select)
+
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<c-j>'
+
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<c-k>'
+
+
+inoremap <silent><expr> <c-space> coc#refresh()
 
 
 " ===========================================================================
@@ -153,14 +250,10 @@ autocmd FileType python map <buffer> <Leader>r :w<CR>:exec '!python' shellescape
 " ===========================================================================
 " GO 
 " ---------------------------------------------------------------------------
-"autocmd FileType go nmap <leader>b <Plug>(go-build)
-"autocmd FileType go nmap <leader>r <Plug>(go-run)
-"autocmd FileType go nmap <leader>t <Plug>(go-test)
-"autocmd FileType go nmap <Leader>d <Plug>(go-def-tab)
-"autocmd FileType go nmap <Leader>e :GoRename<CR>
-"autocmd FileType go nmap <leader>a :GoAlternate<CR>
-"autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
+autocmd FileType go setlocal noexpandtab tabstop=4 shiftwidth=4 softtabstop=4
 
+"Enable auto-complete automatically when pressing (dot)
+"au filetype go inoremap <buffer> . .<C-x><C-o>
 
 au FileType go nmap <leader>r <Plug>(go-run)
 au FileType go nmap <leader>b <Plug>(go-build)
@@ -168,28 +261,42 @@ au FileType go nmap <leader>t <Plug>(go-test)
 au FileType go nmap <leader>c <Plug>(go-coverage-toggle)
 au FileType go nmap <Leader>d <Plug>(go-def-tab)
 au FileType go nmap <Leader>e <Plug>(go-rename)
-au FileType go nmap <Leader>s <Plug>(go-implements)
-au FileType go nmap <Leader>i <Plug>(go-info)
+au FileType go nmap <Leader>i <Plug>(go-implements)
+au FileType go nmap <Leader>in <Plug>(go-info)
 au FileType go nmap <Leader>ds <Plug>(go-def-split)
 au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
 au FileType go nmap <leader>a :GoAlternate<CR>
 au FileType go nmap <Leader>ae <Plug>(go-alternate-edit)
 au FileType go nmap <Leader>av <Plug>(go-alternate-vertical)
 
-let g:completor_filetype_map = {}
-let g:completor_filetype_map.go = {'ft': 'lsp', 'cmd': 'gopls -remote=auto'}"
+" disable gd from vim-go
+let g:go_def_mapping_enabled = 0
 
-let g:go_doc_popup_window = 1
 
-let g:go_auto_sameids = 1
+" GoTo code navigation
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+
+"Go syntax highlighting
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_operators = 1
+
+"Auto formatting and importing
+let g:go_fmt_autosave = 1
 let g:go_fmt_command = "goimports"
-let g:go_metalinter_autosave_enabled = ['vet', 'golint']
-let g:go_metalinter_autosave = 1
-let g:go_def_mode='gopls'
-let g:go_info_mode='gopls'
 
+" Status line types/signatures
+let g:go_auto_type_info = 1
 
-
+  
 " ===========================================================================
 " OPEN THE RSPEC FILE OF A GIVEN RUBY FILE(CONTROLLER, MODEL, ETC)
 " ---------------------------------------------------------------------------
@@ -269,46 +376,12 @@ endfunction
 " Pytest
 " -------------------------------------------------------
 "autocmd FileType python nmap <silent><Leader>t <Esc>:Pytest file<CR>
-""autocmd FileType python nmap <silent><Leader>T <Esc>:Pytest class<CR>
+"autocmd FileType python nmap <silent><Leader>T <Esc>:Pytest class<CR>
 "autocmd FileType python nmap <silent><Leader>T <Esc>:Pytest method<CR>
 "autocmd FileType python nmap <silent><Leader>l <Esc>:Pytest last<CR>
 
-" ------------------------------------------------------
-" VROOM PLUGIN CONFIG
-" -----------------------------------------------------
-" Map default keys to run tests (Default 1)
-let g:vroom_map_keys = 0 
-"nnoremap <leader>t :VroomRunTestFile<cr>
-"nnoremap <leader>T :VroomRunNearestTest<cr>
-"nnoremap <leader>l :VroomRunLastTest<cr>
+nmap <silent> <leader>X :TestFile<CR>
 
-"autocmd FileType ruby nnoremap <leader>t :VroomRunTestFile<cr>
-"autocmd FileType ruby nnoremap <leader>T :VroomRunNearestTest<cr>
-"autocmd FileType ruby nnoremap <leader>l :VroomRunLastTest<cr>
-
-" Add the virtualenv's site-packages to vim path
-"import os.path
-"import sys
-"import vim
-"if 'VIRTUAL_ENV' in os.environ:
-"    project_base_dir = os.environ['VIRTUAL_ENV']
-"    sys.path.insert(0, project_base_dir)
-"    activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
-"    execfile(activate_this, dict(__file__=activate_this))
-"EOF
 
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 let g:ctrlp_custom_ignore = 'tmp\|DS_Store\|git'
-
-"let ropevim_vim_completion=0
-"let ropevim_extended_complete=0
-
-"let g:jedi#goto_command = "<leader>d"
-"let g:jedi#goto_assignments_command = "<leader>g"
-let g:jedi#goto_definitions_command = "<leader>d"
-"let g:jedi#documentation_command = "K"
-let g:jedi#usages_command = "<leader>u"
-"let g:jedi#completions_command = "<C-Space>"
-"let g:jedi#rename_command = "<leader>re"
-let g:jedi#use_tabs_not_buffers = 1
-
